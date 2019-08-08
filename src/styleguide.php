@@ -16,15 +16,20 @@ function load_view( string $view_name = '', $args = [] ) {
 }
 
 /**
- * Create the fake WP page.
+ * Init the styleguide.
  */
-new PageOnTheFly(
-	[
-		'slug'         => 'styleguide',
-		'post_title'   => 'Styleguide',
-		'post_content' => 'Components styleguide',
-	]
-);
+function init_styleguide() {
+	/**
+	 * Create the fake WP page.
+	 */
+	new PageOnTheFly(
+		[
+			'slug'         => 'styleguide',
+			'post_title'   => 'Styleguide',
+			'post_content' => 'Components styleguide',
+		]
+	);
+}
 
 
 /**

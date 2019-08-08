@@ -21,7 +21,7 @@
   },
   "autoload": {
     "psr-4": {
-      "Nolte\\Package\\": "src"
+      "LeanStyleguide\\": "src"
     }
   },
   "repositories": {
