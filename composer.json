@@ -1,0 +1,36 @@
+{
+  "name": "nolte/lean-styleguide",
+  "description": "A styleguide for the Lean Theme's UI components",
+  "homepage": "https://github.com/wearenolte/lean-theme-styleguide",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Nolte",
+      "email": "developer@wearenolte.com",
+      "homepage": "https://wearenolte.com/"
+    },
+    {
+      "name": "Francisco Giraldo",
+      "email": "fcog111@gmail.com",
+      "homepage": "http://franciscogiraldo.com/"
+    }
+  ],
+  "require": {
+    "php": ">=7.3.2"
+  },
+  "autoload": {
+    "psr-4": {
+      "Nolte\\Package\\": "src"
+    }
+  },
+  "repositories": {
+    "dev-package": {
+      "type": "path",
+      "url": "lean-styleguide",
+      "options": {
+        "symlink": true
+      }
+    }
+  }
+}
