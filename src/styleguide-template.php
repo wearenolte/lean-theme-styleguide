@@ -12,13 +12,13 @@
 
 	<body class="js-lean-styleguide">
 
-		<div class="my-8 container">
+		<div class="sg-my-8 container">
 
-			<h1 class="h1">Components Styleguide</h1>
+			<h1 class="sg-h1">Components Styleguide</h1>
 
 		</div>
 
-		<div class="my-8">
+		<div class="sg-my-8">
 
 			<?php do_action( 'lean_styleguide_content' ); ?>
 
