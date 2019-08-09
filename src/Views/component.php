@@ -1,5 +1,6 @@
 <?php
 
+use Lean\Load;
 
 $directory       = $args['directory'] ?? '';
 $component_slug  = $args['component_slug'] ?? '';

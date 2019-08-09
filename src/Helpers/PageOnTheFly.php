@@ -1,5 +1,5 @@
 <?php
-namespace LeanStyleguide\Helpers\PageOnTheFly;
+namespace LeanStyleguide\Helpers;
 
 /**
  * PageOnTheFly
@@ -32,7 +32,7 @@ class PageOnTheFly {
 	 */
 	public function __construct( $args ) {
 		add_filter( 'the_posts', [ $this, 'create_fly_page' ] );
-		add_action( 'template_redirect', [ $this, 'set_fly_page_template' ] );
+
 		$this->args = $args;
 		$this->slug = $args['slug'];
 	}
@@ -52,7 +52,7 @@ class PageOnTheFly {
 		if ( count( $posts ) == 0 && ( strtolower( $wp->request ) == $page_slug || $wp->query_vars['page_id'] == $page_slug ) ) {
 
 			//create a fake post
-			$post              = new stdClass;
+			$post              = new \stdClass;
 			$post->post_author = 1;
 			$post->post_name   = $page_slug;
 			$post->guid        = get_bloginfo( 'wpurl' . '/' . $page_slug );
@@ -86,16 +86,5 @@ class PageOnTheFly {
 		}
 
 		return $posts;
-	}
-
-	/**
-	 * Set a custom template.
-	 */
-	public static function set_fly_page_template() {
-		if ( is_page( self::PAGE_ID ) ) {
-			$default_template = 'styleguide-template.php';
-			include apply_filters( 'lean_styleguide_template', $default_template );
-			exit;
-		}
 	}
 }
