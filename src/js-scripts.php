@@ -3,10 +3,10 @@
     collapseContainer.querySelector( '.js-collapse-button' ).addEventListener( 'click', function () {
       var content = collapseContainer.querySelector( '.js-collapse-content' )
 
-      if ( content.classList.contains( 'hidden' ) ) {
-        content.classList.remove( 'hidden' )
+      if ( content.classList.contains( 'sg-hidden' ) ) {
+        content.classList.remove( 'sg-hidden' )
       } else {
-        content.classList.add( 'hidden' )
+        content.classList.add( 'sg-hidden' )
       }
     } )
   } )

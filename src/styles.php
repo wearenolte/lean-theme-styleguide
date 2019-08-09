@@ -1,8 +1,4 @@
 <style>
-body {
-	background-color: #f0f0f0;
-}
-
 .fixed {
 	position: static !important;
 }
@@ -64,6 +60,10 @@ body {
 
 .sg-text-blue {
 	color: blue;
+}
+
+.sg-bg-gray {
+	background-color: #f0f0f0;
 }
 
 .sg-bg-gray-4 {

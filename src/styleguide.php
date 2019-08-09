@@ -134,11 +134,11 @@ class Styleguide {
 						self::load_view(
 							'component',
 							[
-								'directory'               => $directory,
-								'component_slug'          => $component_slug,
-								'component_instance_data' => $component_instance_data,
-								'container'               => $container,
-								'component_class'         => $component_class,
+								'directory'       => $directory,
+								'component_slug'  => $component_slug,
+								'component_data'  => $component_instance_data,
+								'container'       => $container,
+								'component_class' => $component_class,
 							]
 						);
 					}

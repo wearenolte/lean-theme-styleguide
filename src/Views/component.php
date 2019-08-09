@@ -21,8 +21,7 @@ $container_class = $container ? 'container' : '';
 		<?php echo '<pre>' . print_r( $component_data, true ) . '</pre>'; ?>
 	</div>
 
-
-	<div class="sg-mt-4 <?php echo esc_attr( $component_class ); ?>">
+	<div class="sg-mt-4 sg-bg-gray <?php echo esc_attr( $component_class ); ?>">
 
 		<?php
 		Load::$directory(

@@ -3,6 +3,98 @@ View in a single page all your coded UI components.
 
 By default it reads the atoms, molecules, organisms and templates from the components folder of the Lean Theme.
 
+## How to use
+
+### Component Autoload
+
+The UI components will be loaded automatically.
+
+If they don't show up then you may need to pass dummy data. (Read next section)
+
+### Passing dummy data to the components in the styleguide
+
+To pass the arguments to the components in the styleguide, you will need to create a json file named exactly as the component
+and declare the data in the following format:
+
+```json
+{
+  "variants": [
+    {
+      "arg1": "Lorem Ipsum",
+      "arg2": "Lorem Ipsum"
+    }
+  ]
+}
+```
+
+**example:**
+
+Component filename: _link.php_
+
+Component dummy data filename: _link.json_
+
+```json
+{
+  "variants": [
+    {
+      "class": "color-red",
+      "title": "Lorem Ipsum Title",
+      "url": "http://google.com"
+    }
+  ]
+}
+```
+
+### Declaring component variants
+
+Simply create another object in the variants array:
+
+```json
+{
+  "variants": [
+    {
+      "arg1": "Lorem Ipsum",
+      "arg2": "Lorem Ipsum"
+    },
+    {
+      "arg1": "Lorem Ipsum",
+      "arg2": "Lorem Ipsum"
+    }
+  ]
+}
+```
+
+**example:**
+
+```json
+{
+  "variants": [
+    {
+      "title": "Lorem Ipsum Title",
+      "url": "http://google.com"
+    },
+    {
+      "style": "red",
+      "title": "Lorem Ipsum Title",
+      "url": "http://google.com"
+    }
+  ]
+}
+```
+
+**Note**: the `style` argument is a keyword convention in the styleguide.
+You can declare multiple styles for a component and they will be printed in the component's heading info section.
+
+Current version supports to 4 styles per component:
+
+`style`
+
+`style2`
+
+`style3`
+
+`style4`
+
 ## Configurations
 
 ### Change the template file
