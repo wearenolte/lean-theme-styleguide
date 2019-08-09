@@ -3,8 +3,9 @@ View in a single page all your coded UI components.
 
 By default it reads the atoms, molecules, organisms and templates from the components folder of the Lean Theme.
 
-##Configurations
-###Change the template file
+## Configurations
+
+### Change the template file
 
 Use this filter:
 `lean_styleguide_template`
@@ -33,7 +34,7 @@ The custom template will need to have this 3 action calls:
 
 You can view the styleguide-template.php from this library for reference.
 
-###Add code to the Head tag
+### Add code to the Head tag
 
 Use this action: `lean_styleguide_header`
 
@@ -51,7 +52,7 @@ add_action(
 );
 ```
 
-###Add code to the Footer tag
+### Add code to the Footer tag
 
 Use this action: `lean_styleguide_footer`
 
@@ -67,7 +68,7 @@ add_action(
 );
 ```
 
-###Change the component's folder path
+### Change the component's folder path
 
 Use this filter: `lean_styleguide_component_dir_path`
 
@@ -81,7 +82,7 @@ add_action(
 );
 ```
 
-###Change the styleguide's CSS stylesheet
+### Change the styleguide's CSS stylesheet
 
 Use this filter: `lean_styleguide_css`
 
