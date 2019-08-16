@@ -95,6 +95,24 @@ Current version supports to 4 styles per component:
 
 `style4`
 
+### Removing the styleguide container in a component section
+
+If you happen to have a full width component and want to visualize the component without the styleguide's container.
+
+You can add `"container": false` in the json file of the component:
+
+```json
+{
+  "container": false,
+  "variants": [
+    {
+      "title": "Lorem Ipsum Title",
+      "url": "http://google.com"
+    }
+  ]
+}
+```
+
 ## Configurations
 
 ### Change the template file
@@ -107,8 +125,8 @@ Use this filter:
 
 Adding your own template in the theme's folder.
 ```php
-add_filter( 
-    'lean_styleguide_template', 
+add_filter(
+    'lean_styleguide_template',
     function() {
         return get_stylesheet_directory() . '/styleguide-template2.php';
     }
@@ -132,8 +150,8 @@ Use this action: `lean_styleguide_header`
 
 **example**:
 ```php
-add_action( 
-    'lean_styleguide_header', 
+add_action(
+    'lean_styleguide_header',
     function() {
         echo '<style>
         body {
@@ -150,8 +168,8 @@ Use this action: `lean_styleguide_footer`
 
 **example**:
 ```php
-add_action( 
-    'lean_styleguide_footer', 
+add_action(
+    'lean_styleguide_footer',
     function() {
         echo '<script>
             console.log(\'hello\')
