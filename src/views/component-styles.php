@@ -12,7 +12,7 @@ $styles = $args['styles'] ?? [];
 			<?php if ( $style ) : ?>
 
 				<div>
-					<b>Style <?php echo esc_html( $style_counter ); ?>:</b>
+					<b>Style <?php echo 1 === $style_counter ? '' :  esc_html( $style_counter ); ?>:</b>
 					<?php echo esc_html( $style ); ?>
 				</div>
 
