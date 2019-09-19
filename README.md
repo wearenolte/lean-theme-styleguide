@@ -95,23 +95,42 @@ Current version supports to 4 styles per component:
 
 `style4`
 
-### Removing the styleguide container in a component section
+### Setting an image ID
+Sometimes it's useful to have an image ID as a component's argument value.
 
-If you happen to have a full width component and want to visualize the component without the styleguide's container.
+For example if the component uses the function wp_get_attachment_image().
 
-You can add `"container": false` in the json file of the component:
+But this attachment ID may change between environments.
+
+For adding a WP attachment image ID as a component's parameter value use this placeholder: **${image-id}**
 
 ```json
 {
-  "container": false,
   "variants": [
     {
-      "title": "Lorem Ipsum Title",
-      "url": "http://google.com"
+      "class": "",
+      "image_id": "${image-id}",
+      "alt": "Lorem Ipsum alt"
     }
   ]
 }
 ```
+
+To set the value of this placeholder use the following hook:
+
+Use this filter: `lean_styleguide_component_image_id`
+
+**example**:
+```php
+add_filter(
+  'lean_styleguide_component_image_id',
+  function() {
+    return STYLEGUIDE_IMAGE_ID;
+  }
+);
+```
+
+**Note:** the constant STYLEGUIDE_IMAGE_ID should be declare in the wp-config.php file so that the different environments have their own value.
 
 ## Configurations
 
@@ -185,10 +204,10 @@ Use this filter: `lean_styleguide_component_dir_path`
 **example**:
 ```php
 add_action(
-	'lean_styleguide_component_dir_path',
-	function() {
-		return get_template_directory() . '/frontend/views';
-	}
+  'lean_styleguide_component_dir_path',
+  function() {
+    return get_template_directory() . '/frontend/views';
+  }
 );
 ```
 
@@ -199,9 +218,9 @@ Use this filter: `lean_styleguide_css`
 **example**:
 ```php
 add_filter(
-	'lean_styleguide_css',
-	function() {
-		return get_stylesheet_directory() . '/frontend/dist/main2.css';
-	}
+  'lean_styleguide_css',
+  function() {
+    return get_stylesheet_directory() . '/frontend/dist/main2.css';
+  }
 );
 ```

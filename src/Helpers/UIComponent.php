@@ -40,9 +40,36 @@ class UIComponent {
 		$data_file = str_replace( 'php', 'json', $file_path );
 
 		if ( file_exists( $data_file ) ) {
-			return (array) json_decode( file_get_contents( $data_file ), true );
+			$data = (array) json_decode( file_get_contents( $data_file ), true );
+			return self::replace_image_id( $data );
 		}
 
 		return [];
+	}
+
+	/**
+	 * Reads the variants arguments, and replaces the image placeholders for the Image ID set with a filter
+	 *
+	 * @param array $data The json data from a components json file.
+	 *
+	 * @return array
+	 */
+	public static function replace_image_id( array $data ): array {
+		if ( ! isset( $data['variants'] ) ) {
+			return $data;
+		}
+
+		$default_image_id = 0;
+		$image_id = apply_filters( 'lean_styleguide_component_image_id', $default_image_id );
+
+		foreach ( (array) $data['variants'] as $index_variant => $variant ) {
+			foreach ( $variant as $index_argument => $data_item ) {
+				if ( '${image-id}' === $data_item ) {
+					$data['variants'][ $index_variant ][ $index_argument ] = $image_id;
+				}
+			}
+		}
+
+		return $data;
 	}
 }
