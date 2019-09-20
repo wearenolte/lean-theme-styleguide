@@ -53,6 +53,7 @@ class UIComponent {
 	 * @param array $data The json data from a components json file.
 	 *
 	 * @return array
+	 *
 	 */
 	public static function replace_image_id( array $data ): array {
 		if ( ! isset( $data['variants'] ) ) {
@@ -62,14 +63,21 @@ class UIComponent {
 		$default_image_id = 0;
 		$image_id = apply_filters( 'lean_styleguide_component_image_id', $default_image_id );
 
-		foreach ( (array) $data['variants'] as $index_variant => $variant ) {
-			foreach ( $variant as $index_argument => $data_item ) {
-				if ( '${image-id}' === $data_item ) {
-					$data['variants'][ $index_variant ][ $index_argument ] = $image_id;
-				}
-			}
-		}
+		array_walk_recursive( $data['variants'], 'self::look_in_arguments', $image_id );
 
 		return $data;
+	}
+
+	/**
+	 * Check an array element for the image placeholder and replaced its the value.
+	 *
+	 * @param mixed $data An array's element.
+	 * @param string $key An array's key
+	 * @param int $image_id The placeholder's value.
+	 */
+	public static function look_in_arguments( &$data, string $key, int $image_id ) {
+		if ( '${image-id}' === $data ) {
+			$data = $image_id;
+		}
 	}
 }
