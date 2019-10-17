@@ -10,7 +10,7 @@
 
 	</head>
 
-	<body class="js-lean-styleguide">
+	<body id="app" class="js-lean-styleguide">
 
 		<div class="sg-my-8 container">
 

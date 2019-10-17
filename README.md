@@ -1,7 +1,9 @@
 # The LEAN Theme's styleguide
 View in a single page all your coded UI components.
 
-By default it reads the atoms, molecules, organisms and templates from the components folder of the Lean Theme.
+By default it reads the atoms, molecules, organisms and templates from the components folder of the Lean Theme.0
+
+The styleguide can be accessed on `[site-url]/styleguide`
 
 ## How to use
 
