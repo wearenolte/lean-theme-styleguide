@@ -2,9 +2,9 @@
 
 namespace LeanStyleguide;
 
+use LeanStyleguide\Helpers\LoadUIComponents;
 use LeanStyleguide\Helpers\PageOnTheFly;
-use LeanStyleguide\Helpers\UIComponent;
-use LeanStyleguide\Helpers\LoadFile;
+use LeanStyleguide\Helpers\ViewsLoader;
 
 /**
  * Class Styleguide
@@ -14,39 +14,41 @@ use LeanStyleguide\Helpers\LoadFile;
  * @package LeanStyleguide
  */
 class Styleguide {
+
 	/**
-	 * Class singleton instance
-	 *
-	 * @var Styleguide
+	 * URL query used for loading individual components.
 	 */
-	private static $instance;
+	const COMPONENT_URL_QUERY               = 'component';
+	const TYPE_URL_QUERY                    = 'type';
+	const COMPONENT_VISUALIZATION_URL_QUERY = 'view';
+
+	/**
+	 * A LoadUIComponent instance.
+	 *
+	 * @var $loadUIComponent
+	 */
+	private $loadUIComponent;
 
 	/**
 	 * The PageOnTheFly instance that holds the WP page info.
 	 *
-	 * @var PageOnTheFly
+	 * @var $fly_page_instance
 	 */
-	private static $fly_page_instance;
+	private $fly_page_instance;
 
 	/**
-	 * Library base path
+	 * ViewsLoader instance.
+	 *
+	 * @var object
+	 */
+	private $views_loader;
+
+	/**
+	 * Components base path
 	 *
 	 * @var string
 	 */
-	private static $base_path;
-
-	/**
-	 * Initialize singleton.
-	 *
-	 * @return Styleguide
-	 */
-	public static function init() {
-		if ( null === self::$instance ) {
-			self::$instance = new self();
-		}
-
-		return self::$instance;
-	}
+	private $base_path;
 
 	/**
 	 * Styleguide constructor.
@@ -55,7 +57,7 @@ class Styleguide {
 		/**
 		 * Create the fake WP page.
 		 */
-		self::$fly_page_instance = new PageOnTheFly(
+		$this->fly_page_instance = new PageOnTheFly(
 			[
 				'slug'         => 'styleguide',
 				'post_title'   => 'Styleguide',
@@ -63,114 +65,27 @@ class Styleguide {
 			]
 		);
 
-		self::$base_path = dirname( __FILE__ );
+		$this->base_path = get_template_directory() . '/frontend/components/';
 
-		add_action( 'template_redirect', [ $this, 'set_fly_page_template' ] );
-		add_action( 'lean_styleguide_header', [ __CLASS__, 'create_header' ] );
-		add_action( 'lean_styleguide_footer', [ __CLASS__, 'create_footer' ] );
-		add_action( 'lean_styleguide_content', [ __CLASS__, 'create_content' ] );
-	}
+		$this->views_loader    = new ViewsLoader();
+		$this->loadUIComponent = new LoadUIComponents();
 
-	/**
-	 * Views loader.
-	 *
-	 * @param string $file_name The view name
-	 * @param array  $args      The view arguments.
-	 */
-	public static function load_view( string $view_name = '', $args = [] ) {
-		LoadFile::file_loader( $view_name, self::$base_path . '/views', $args );
-	}
+		$component_query = sanitize_text_field( $_GET[ self::COMPONENT_URL_QUERY ] ?? '' );
 
-	/**
-	 * Auto load classes in directory by looking on folder and sub-folders.
-	 *
-	 * @param string $directory The directories to load.
-	 */
-	public static function autoload_components( string $directory ) {
-		$default_directory_path = get_template_directory() . '/frontend/components/' . $directory;
-		$directory_path         = apply_filters( 'lean_styleguide_component_dir_path', $default_directory_path );
-
-		$iterator = new \RecursiveIteratorIterator(
-			new \RecursiveDirectoryIterator( $directory_path ),
-			\RecursiveIteratorIterator::SELF_FIRST
-		);
-
-		$regex = new \RegexIterator(
-			$iterator, '/^.+\.php$/i',
-			\RecursiveRegexIterator::GET_MATCH
-		);
-
-		foreach ( $regex as $file => $object ) {
-			$component_slug = UIComponent::get_component_slug( $directory, $file );
-
-			self::load_view(
-				'component-heading',
-				[
-					'component_slug' => $component_slug,
-				]
-			);
-
-			$component_data = UIComponent::get_component_data( $file );
-
-			if ( $component_data ) {
-				$container       = $component_data['container'] ?? true;
-				$component_class = $component_data['class'] ?? '';
-
-				if ( ! empty( $component_data['variants'] ) ) {
-					foreach ( (array) $component_data['variants'] as $component_instance_data ) {
-
-						self::load_view(
-							'component-styles',
-							[
-								'styles' => [
-									empty( $component_instance_data['style'] ) ? 'default' : $component_instance_data['style'],
-									empty( $component_instance_data['style2'] ) ? '' : $component_instance_data['style2'],
-									empty( $component_instance_data['style3'] ) ? '' : $component_instance_data['style3'],
-									empty( $component_instance_data['style4'] ) ? '' : $component_instance_data['style4'],
-								],
-							]
-						);
-
-						self::load_view(
-							'component',
-							[
-								'directory'       => $directory,
-								'component_slug'  => $component_slug,
-								'component_data'  => $component_instance_data,
-								'container'       => $container,
-								'component_class' => $component_class,
-							]
-						);
-					}
-				} else {
-					self::load_view(
-						'component',
-						[
-							'directory'       => $directory,
-							'component_slug'  => $component_slug,
-							'container'       => $container,
-							'component_class' => $component_class,
-						]
-					);
-				}
-			} else {
-				self::load_view(
-					'component',
-					[
-						'directory'      => $directory,
-						'component_slug' => $component_slug,
-					]
-				);
-			}
-
-			self::load_view( 'component-close-heading' );
+		if ( 'all' === $component_query ) {
+			$this->loadUIComponent->load_all_components_json();
+		} else {
+			add_action( 'template_redirect', [ $this, 'set_fly_page_template' ] );
+			add_action( 'lean_styleguide_header', [ $this, 'create_header' ] );
+			add_action( 'lean_styleguide_footer', [ $this, 'create_footer' ] );
+			add_action( 'lean_styleguide_content', [ $this, 'create_content' ] );
 		}
 	}
 
 	/**
 	 * Creates the Styleguide page header.
 	 */
-	public static function create_header() {
+	public function create_header() {
 		$default_stylesheet = get_template_directory_uri() . '/frontend/dist/main.css';
 		$stylesheet         = apply_filters( 'lean_styleguide_css', $default_stylesheet );
 		?>
@@ -184,7 +99,7 @@ class Styleguide {
 	/**
 	 * Creates the Styleguide page footer.
 	 */
-	public static function create_footer() {
+	public function create_footer() {
 		?>
 
 		<script src="<?php echo esc_url( get_template_directory_uri() ); ?>/frontend/dist/main.js"></script>
@@ -196,33 +111,25 @@ class Styleguide {
 	/**
 	 * Creates the Styleguide page main content.
 	 */
-	public static function create_content() {
-		$default_directories = [
-			'atoms',
-			'molecules',
-			'organisms',
-			'templates',
-		];
+	public function create_content() {
+		$component_query               = sanitize_text_field( $_GET[ self::COMPONENT_URL_QUERY ] ?? '' );
+		$type_query                    = sanitize_text_field( $_GET[ self::TYPE_URL_QUERY ] ?? '' );
+		$component_visualization_query = sanitize_text_field( $_GET[ self::COMPONENT_VISUALIZATION_URL_QUERY ] ?? '' );
 
-		$directories = apply_filters( 'lean_styleguide_component_directories', $default_directories );
-
-		foreach ( $directories as $directory ) {
-			self::load_view(
-				'directory-heading',
-				[
-					'directory' => $directory,
-				]
-			);
-
-			self::autoload_components( $directory );
+		if ( $component_query ) {
+			$this->loadUIComponent->load_one_component( $component_query, $component_visualization_query );
+		} else if ( $type_query ) {
+			$this->loadUIComponent->load_all_components_per_type( $type_query );
+		} else {
+			$this->loadUIComponent->load_all_components();
 		}
 	}
 
 	/**
 	 * Sets a custom template.
 	 */
-	public static function set_fly_page_template() {
-		if ( is_page( self::$fly_page_instance::PAGE_ID ) ) {
+	public function set_fly_page_template() {
+		if ( is_page( $this->fly_page_instance::PAGE_ID ) ) {
 			$default_template = 'styleguide-template.php';
 			include apply_filters( 'lean_styleguide_template', $default_template );
 			exit;

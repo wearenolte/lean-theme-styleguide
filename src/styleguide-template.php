@@ -12,17 +12,7 @@
 
 	<body id="app" class="js-lean-styleguide">
 
-		<div class="sg-my-8 container">
-
-			<h1 class="sg-h1">Components Styleguide</h1>
-
-		</div>
-
-		<div class="sg-my-8">
-
-			<?php do_action( 'lean_styleguide_content' ); ?>
-
-		</div>
+		<?php do_action( 'lean_styleguide_content' ); ?>
 
 	</body>
 
