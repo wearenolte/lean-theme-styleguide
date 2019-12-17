@@ -10,7 +10,7 @@
 
 	</head>
 
-	<body id="app" class="js-lean-styleguide">
+	<body id="wpbody" class="js-lean-styleguide">
 
 		<?php do_action( 'lean_styleguide_content' ); ?>
 
