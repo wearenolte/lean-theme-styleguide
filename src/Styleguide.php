@@ -102,7 +102,7 @@ class Styleguide {
 	public function create_footer() {
 		?>
 
-		<script src="<?php echo esc_url( get_template_directory_uri() ); ?>/frontend/dist/main.js"></script>
+		<script src="<?php echo esc_url( get_template_directory_uri() ); ?>/frontend/dist/main.js?<?php echo time() ?>"></script>
 
 		<?php
 		include 'js-scripts.php';

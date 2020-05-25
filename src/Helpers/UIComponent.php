@@ -41,29 +41,28 @@ class UIComponent {
 
 		if ( file_exists( $data_file ) ) {
 			$data = (array) json_decode( file_get_contents( $data_file ), true );
-			return self::replace_image_id( $data );
+			return self::replace_variables( $data );
 		}
 
 		return [];
 	}
 
 	/**
-	 * Reads the variants arguments, and replaces the image placeholders for the Image ID set with a filter
+	 * Reads the variants arguments, and replaces the variable placeholders with their value.
 	 *
 	 * @param array $data The json data from a components json file.
 	 *
 	 * @return array
 	 *
 	 */
-	public static function replace_image_id( array $data ): array {
+	public static function replace_variables( array $data ): array {
 		if ( ! isset( $data['variants'] ) ) {
 			return $data;
 		}
 
-		$default_image_id = 0;
-		$image_id = apply_filters( 'lean_styleguide_component_image_id', $default_image_id );
+		$variables = apply_filters( 'lean_styleguide_component_variables', [] );
 
-		array_walk_recursive( $data['variants'], 'self::look_in_arguments', $image_id );
+		array_walk_recursive( $data['variants'], 'self::look_in_arguments', $variables );
 
 		return $data;
 	}
@@ -73,11 +72,13 @@ class UIComponent {
 	 *
 	 * @param mixed $data An array's element.
 	 * @param string $key An array's key
-	 * @param int $image_id The placeholder's value.
+	 * @param array $variables The varibles placeholder's values.
 	 */
-	public static function look_in_arguments( &$data, string $key, int $image_id ) {
-		if ( '${image-id}' === $data ) {
-			$data = $image_id;
+	public static function look_in_arguments( &$data, string $key, array $variables ) {
+		foreach ( $variables as $variable_key => $variable_value ) {
+			if ( '${' . $variable_key . '}' === $data ) {
+				$data = $variable_value;
+			}
 		}
 	}
 }

@@ -97,14 +97,51 @@ Current version supports to 4 styles per component:
 
 `style4`
 
-### Setting an image ID
-Sometimes it's useful to have an image ID as a component's argument value.
+### Setting a variable placeholder
+Sometimes it's useful to have a variable placeholder as a component's argument value.
 
-For example if the component uses the function wp_get_attachment_image().
+For example if the component uses the function wp_get_attachment_image(), you can set an image placeholder.
 
-But this attachment ID may change between environments.
+Use this hook to create placeholders:
+```php
+add_filter(
+  'lean_styleguide_component_variables',
+  function() {
+    return [
+      'placeholder-key'   => 'placeholder-value',
+      'placeholder-key-2' => 'placeholder-value-2',
+    ];
+  }
+);
+```
+Now you can use the placeholder in the json dummy files like so:
 
-For adding a WP attachment image ID as a component's parameter value use this placeholder: **${image-id}**
+```json
+{
+  "variants": [
+    {
+      "class": "",
+      "image_id": "${placeholder-key}", // this will be replaced to 'placeholder-value'.
+      "html": "${placeholder-key-2}", // this will be replaced to 'placeholder-value-2'.
+      "alt": "Lorem Ipsum alt"
+    }
+  ]
+}
+```
+
+**example**:
+```php
+add_filter(
+  'lean_styleguide_component_variables',
+  function() {
+    return [
+      'image-id' => 2 // Where 2 is the WP image attachment ID.
+    ];
+  }
+);
+```
+
+Placeholder usage:
 
 ```json
 {
@@ -117,22 +154,6 @@ For adding a WP attachment image ID as a component's parameter value use this pl
   ]
 }
 ```
-
-To set the value of this placeholder use the following hook:
-
-Use this filter: `lean_styleguide_component_image_id`
-
-**example**:
-```php
-add_filter(
-  'lean_styleguide_component_image_id',
-  function() {
-    return STYLEGUIDE_IMAGE_ID;
-  }
-);
-```
-
-**Note:** the constant STYLEGUIDE_IMAGE_ID should be declare in the wp-config.php file so that the different environments have their own value.
 
 ## Configurations
 

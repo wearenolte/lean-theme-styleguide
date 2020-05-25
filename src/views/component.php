@@ -23,7 +23,7 @@ $container_class = $container ? 'container' : '';
 	<?php endif; ?>
 
 	<div class="sg-hidden sg-text-13 js-collapse-content">
-		<?php echo '<pre>' . print_r( $component_data, true ) . '</pre>'; ?>
+		<?php echo '<pre>' . htmlentities( print_r( $component_data, true ) ) . '</pre>'; ?>
 	</div>
 
 	<div class="sg-mt-4 sg-bg-gray <?php echo esc_attr( $component_class ); ?>">
