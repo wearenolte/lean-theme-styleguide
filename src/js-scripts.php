@@ -1,5 +1,11 @@
 <script>
   document.querySelectorAll( '.js-collapse' ).forEach( function ( collapseContainer ) {
+    var collapseButton = collapseContainer.querySelector( '.js-collapse-button' )
+
+	if ( !collapseButton ) {
+	  return
+	}
+
     collapseContainer.querySelector( '.js-collapse-button' ).addEventListener( 'click', function () {
       var content = collapseContainer.querySelector( '.js-collapse-content' )
 
@@ -8,6 +14,7 @@
       } else {
         content.classList.add( 'sg-hidden' )
       }
-    } )
-  } )
+
+    })
+  })
 </script>
